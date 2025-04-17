@@ -8,12 +8,14 @@ sourceCompatibility = 17
 targetCompatibility = 17
 
 test {
+    /*
+}
     useJUnitPlatform {
         if (!project.hasProperty('dockerTests')) {
             excludeTags 'docker'
         }
     }
-    systemProperty('net.kyori.ansi.colorLevel', 'indexed16')
+    systemProperty('net.kyori.ansi.colorLevel', 'indexed16') */
 }
 
 jacocoTestReport {

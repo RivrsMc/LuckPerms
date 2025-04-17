@@ -65,12 +65,12 @@ public abstract class HikariConnectionFactory implements ConnectionFactory {
      *
      * <p>Each driver does this slightly differently...</p>
      *
-     * @param config the hikari config
-     * @param address the database address
-     * @param port the database port
+     * @param config       the hikari config
+     * @param address      the database address
+     * @param port         the database port
      * @param databaseName the database name
-     * @param username the database username
-     * @param password the database password
+     * @param username     the database username
+     * @param password     the database password
      */
     protected abstract void configureDatabase(HikariConfig config, String address, String port, String databaseName, String username, String password);
 
@@ -87,7 +87,7 @@ public abstract class HikariConnectionFactory implements ConnectionFactory {
     /**
      * Sets the given connection properties onto the config.
      *
-     * @param config the hikari config
+     * @param config     the hikari config
      * @param properties the properties
      */
     protected void setProperties(HikariConfig config, Map<String, Object> properties) {
@@ -121,12 +121,30 @@ public abstract class HikariConnectionFactory implements ConnectionFactory {
         String address = addressSplit[0];
         String port = addressSplit.length > 1 ? addressSplit[1] : defaultPort();
 
+        // LuckPerms Rivrs - Start
+        String username = this.configuration.getUsername();
+        String password = this.configuration.getPassword();
+
+        // get the database info/credentials from the environment variables
+        String host = System.getenv("MARIADB_HOST");
+        String portParsed = System.getenv("MARIADB_PORT");
+        String usernameParsed = System.getenv("MARIADB_USERNAME");
+        String passwordParsed = System.getenv("MARIADB_PASSWORD");
+
+        if (host != null && portParsed != null && username != null && password != null) {
+            address = host;
+            port = portParsed;
+            username = usernameParsed;
+            password = passwordParsed;
+        }
+
         // allow the implementation to configure the HikariConfig appropriately with these values
         try {
-            configureDatabase(config, address, port, this.configuration.getDatabase(), this.configuration.getUsername(), this.configuration.getPassword());
+            configureDatabase(config, address, port, this.configuration.getDatabase(), username, password);
         } catch (NoSuchMethodError e) {
             handleClassloadingError(e, plugin);
         }
+        // LuckPerms Rivrs - End
 
         // get the extra connection properties from the config
         Map<String, Object> properties = new HashMap<>(this.configuration.getProperties());
