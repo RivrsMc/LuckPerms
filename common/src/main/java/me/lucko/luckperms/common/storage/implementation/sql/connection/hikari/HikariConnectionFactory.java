@@ -128,7 +128,7 @@ public abstract class HikariConnectionFactory implements ConnectionFactory {
         // get the database info/credentials from the environment variables
         String host = System.getenv("MARIADB_HOST");
         String portParsed = System.getenv("MARIADB_PORT");
-        String usernameParsed = System.getenv("MARIADB_USERNAME");
+        String usernameParsed = System.getenv("MARIADB_USER");
         String passwordParsed = System.getenv("MARIADB_PASSWORD");
 
         if (host != null && portParsed != null && username != null && password != null) {
